@@ -1,14 +1,13 @@
-import type {User} from '@dto/user';
-import express from 'express';
+import {Server} from 'socket.io';
 
-const app = express();
+const port = 3333;
 
-app.get('/', (req, res) => {
-	const user: User = {
-		name: 'sergio',
-	};
+const io = new Server(port);
 
-	return res.json(user);
+io.on('connection', socket => {
+	socket.emit('hello', 'world');
+
+	socket.on('howdy', arg => {
+		console.log(arg);
+	});
 });
-
-app.listen(3333);
