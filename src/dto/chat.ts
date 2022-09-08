@@ -1,5 +1,6 @@
 type Chat = {
-	name: string;
+	reciver: string;
+	sender: string;
 	content: string;
 };
 

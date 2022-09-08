@@ -16,8 +16,8 @@ io.on('connection', socket => {
 	socket.on('chat', args => {
 		const chat = args as Chat;
 
-		const {name} = chat;
+		const {reciver} = chat;
 
-		io.emit(`chat-${name}`, chat);
+		io.emit(`chat-${reciver}`, chat);
 	});
 });
