@@ -1,6 +1,11 @@
+import type {ToDo} from '@dto/todo';
 import {Server} from 'socket.io';
 
 const port = 3333;
+
+type ToDoList = {
+	todos: ToDo[];
+};
 
 const io = new Server(port, {
 	cors: {
@@ -11,23 +16,34 @@ const io = new Server(port, {
 	},
 });
 
-/* Server client */
-
-// io.on('connection', socket => {
-// 	socket.emit('hello', 'world');
-
-// 	socket.on('howdy', arg => {
-// 		console.log(arg);
-// 	});
-// });
-
-/* server front */
+const toDoList: ToDoList = {
+	todos: [],
+};
 
 io.on('connection', socket => {
-	socket.emit('message', 'hello');
+	socket.emit('update', toDoList);
 
-	socket.on('message', arg => {
-		console.log(arg);
-		socket.emit('message', arg);
+	socket.on('add', arg => {
+		const todo: ToDo = {
+			id: Math.random(),
+			done: false,
+			text: arg as string,
+		};
+		const {todos} = toDoList;
+		toDoList.todos = [todo, ...todos];
+		socket.emit('update', toDoList);
+	});
+
+	socket.on('togle', arg => {
+		const {todos} = toDoList;
+		const id = arg as number;
+		toDoList.todos = todos.map(todo => {
+			if (todo.id === id) {
+				return {...todo, done: !todo.done};
+			}
+
+			return {...todo};
+		});
+		socket.emit('update', toDoList);
 	});
 });
