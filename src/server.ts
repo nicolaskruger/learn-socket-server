@@ -21,7 +21,7 @@ const toDoList: ToDoList = {
 };
 
 io.on('connection', socket => {
-	socket.emit('update', toDoList);
+	socket.emit('update', toDoList.todos);
 
 	socket.on('add', arg => {
 		const todo: ToDo = {
@@ -31,10 +31,10 @@ io.on('connection', socket => {
 		};
 		const {todos} = toDoList;
 		toDoList.todos = [todo, ...todos];
-		socket.emit('update', toDoList);
+		io.emit('update', toDoList.todos);
 	});
 
-	socket.on('togle', arg => {
+	socket.on('toggle', arg => {
 		const {todos} = toDoList;
 		const id = arg as number;
 		toDoList.todos = todos.map(todo => {
@@ -44,6 +44,6 @@ io.on('connection', socket => {
 
 			return {...todo};
 		});
-		socket.emit('update', toDoList);
+		io.emit('update', toDoList.todos);
 	});
 });
