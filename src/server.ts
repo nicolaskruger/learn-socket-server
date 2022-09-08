@@ -13,21 +13,21 @@ const io = new Server(port, {
 
 /* Server client */
 
-// io.on('connection', socket => {
-// 	socket.emit('hello', 'world');
-
-// 	socket.on('howdy', arg => {
-// 		console.log(arg);
-// 	});
-// });
-
-/* server front */
-
 io.on('connection', socket => {
-	socket.emit('message', 'hello');
+	socket.emit('hello', 'world');
 
-	socket.on('message', arg => {
+	socket.on('howdy', arg => {
 		console.log(arg);
-		socket.emit('message', arg);
 	});
 });
+
+/* Server front */
+
+// io.on('connection', socket => {
+// 	socket.emit('message', 'hello');
+
+// 	socket.on('message', arg => {
+// 		console.log(arg);
+// 		socket.emit('message', arg);
+// 	});
+// });
